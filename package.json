@@ -6,6 +6,9 @@
     "author": "Slepe",
     "homepage": "https://github.com/unixporn/Mi",
     "license": "MIT",
+    "scripts": {
+        "start": "node index.js"
+    },
     "dependencies": {
         "discord.js": "github:discordjs/discord.js",
         "dotenv": "^8.2.0",
