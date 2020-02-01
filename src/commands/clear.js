@@ -17,12 +17,19 @@ exports.run = async (client, message, args, Discord) => {
                 return console.error(error);
             }
 
-            if (user !== message.author && !message.member.hasPermission("MANAGE_GUILD")) {
-                return message.channel.embed(`**${message.authorName}**, you cannot clear the profile of other users`);
+            if (
+                user !== message.author &&
+                !message.member.hasPermission("MANAGE_GUILD")
+            ) {
+                return message.channel.embed(
+                    `**${message.authorName}**, you cannot clear the profile of other users`
+                );
             }
 
             if (!config || !config.profile) {
-                return message.channel.embed(`**${message.authorName}**, nothing to clear`);
+                return message.channel.embed(
+                    `**${message.authorName}**, nothing to clear`
+                );
             }
 
             message.channel.embed(
@@ -32,7 +39,10 @@ exports.run = async (client, message, args, Discord) => {
 
             try {
                 var response = await message.channel.awaitMessages(
-                    (m) => ["yes", "y", "no", "n"].includes(m.content.toLowerCase()) && m.author === message.author,
+                    (m) =>
+                        ["yes", "y", "no", "n"].includes(
+                            m.content.toLowerCase()
+                        ) && m.author === message.author,
                     {
                         max: 1,
                         time: 10000,
@@ -47,7 +57,9 @@ exports.run = async (client, message, args, Discord) => {
             response = response.first().content.toLowerCase();
 
             if (["no", "n"].includes(response)) {
-                return message.channel.embed(`**${message.authorName}**, cancelled operation`);
+                return message.channel.embed(
+                    `**${message.authorName}**, cancelled operation`
+                );
             }
 
             config.profile = {

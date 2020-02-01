@@ -1,6 +1,8 @@
 exports.run = async (client, message, args, Discord) => {
     if (!args[0]) {
-        return message.channel.embed(`**${message.authorName}**, please provide a question \`.poll <question>\``);
+        return message.channel.embed(
+            `**${message.authorName}**, please provide a question \`.poll <question>\``
+        );
     }
 
     message.channel

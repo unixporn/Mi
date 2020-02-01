@@ -9,7 +9,9 @@ exports.run = (client, message, args, Discord) => {
                 .setImage(user.avatarURL({ size: 2048 }))
         );
     } else {
-        return message.channel.embed(`**${message.authorName}**, I can't find that user`);
+        return message.channel.embed(
+            `**${message.authorName}**, I can't find that user`
+        );
     }
 };
 

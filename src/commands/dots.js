@@ -9,9 +9,14 @@ exports.run = async (client, message, args, Discord) => {
                 return console.error(error);
             }
 
-            if (args[0] && ["clear", "remove"].includes(args[0].toLowerCase())) {
+            if (
+                args[0] &&
+                ["clear", "remove"].includes(args[0].toLowerCase())
+            ) {
                 if (!config.profile.dotfiles) {
-                    return message.channel.embed(`**${message.authorName}**, nothing to remove`);
+                    return message.channel.embed(
+                        `**${message.authorName}**, nothing to remove`
+                    );
                 }
 
                 message.channel.embed(
@@ -21,7 +26,10 @@ exports.run = async (client, message, args, Discord) => {
 
                 try {
                     var response = await message.channel.awaitMessages(
-                        (m) => ["yes", "y", "no", "n"].includes(m.content.toLowerCase()) && m.author === message.author,
+                        (m) =>
+                            ["yes", "y", "no", "n"].includes(
+                                m.content.toLowerCase()
+                            ) && m.author === message.author,
                         {
                             max: 1,
                             time: 10000,
@@ -36,12 +44,16 @@ exports.run = async (client, message, args, Discord) => {
                 response = response.first().content.toLowerCase();
 
                 if (["no", "n"].includes(response)) {
-                    return message.channel.embed(`**${message.authorName}**, cancelled operation`);
+                    return message.channel.embed(
+                        `**${message.authorName}**, cancelled operation`
+                    );
                 }
 
                 config.profile.dotfiles = "";
 
-                message.channel.embed(`Removed **dotfiles** from **${message.author}**`);
+                message.channel.embed(
+                    `Removed **dotfiles** from **${message.author}**`
+                );
             } else if (args.length) {
                 if (args[0].match("(https?:\\/\\/[^\\s]+)")) {
                     if (args[0].length <= 128) {
@@ -51,16 +63,21 @@ exports.run = async (client, message, args, Discord) => {
                             `Set **dotfiles** of **${message.author}** to **${config.profile.dotfiles}**`
                         );
                     } else {
-                        return message.channel.embed(`**${message.authorName}**, maximum length 128 characters`);
+                        return message.channel.embed(
+                            `**${message.authorName}**, maximum length 128 characters`
+                        );
                     }
                 } else {
-                    return message.channel.embed(`**${message.authorName}**, \`${args[0]}\` is not a valid URL`);
+                    return message.channel.embed(
+                        `**${message.authorName}**, \`${args[0]}\` is not a valid URL`
+                    );
                 }
             } else {
                 return message.channel.embed(
                     config.profile.dotfiles
                         ? `**Dotfiles** for ${message.author} **${config.profile.dotfiles}**`
-                        : `**${message.authorName}**, use \`${process.env.PREFIX || "!"}dots <url>\``
+                        : `**${message.authorName}**, use \`${process.env
+                              .PREFIX || "!"}dots <url>\``
                 );
             }
 

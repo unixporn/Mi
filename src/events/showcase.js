@@ -1,5 +1,8 @@
 module.exports = (client, message, Discord) => {
-    if (!message.attachments.size && !message.content.match("(https?:\\/\\/[^\\s]+)")) {
+    if (
+        !message.attachments.size &&
+        !message.content.match("(https?:\\/\\/[^\\s]+)")
+    ) {
         try {
             message.delete();
             message.author.send(
@@ -7,8 +10,12 @@ module.exports = (client, message, Discord) => {
                     .setColor("#FFFFFE")
                     .setDescription(
                         `
-**${message.channel}** is for showcasing your creations (rices, applications, creative work).
-**Questions** about ricing belong in ${message.guild.channels.get(process.env.RICINGCHANNEL)}.`
+**${
+                            message.channel
+                        }** is for showcasing your creations (rices, applications, creative work).
+**Questions** about ricing belong in ${message.guild.channels.get(
+                            process.env.RICINGCHANNEL
+                        )}.`
                     )
                     .addField("You said", message.content.substring(0, 512))
             );
@@ -18,7 +25,10 @@ module.exports = (client, message, Discord) => {
             client.sendLog(
                 new Discord.MessageEmbed()
                     .setColor(message.color)
-                    .setAuthor(message.authorName, message.author.avatarURL({ size: 2048 }))
+                    .setAuthor(
+                        message.authorName,
+                        message.author.avatarURL({ size: 2048 })
+                    )
                     .setTitle("Improper Showcase Submission")
                     .setDescription(message.content)
                     .addField("Channel", message.channel)

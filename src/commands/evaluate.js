@@ -1,14 +1,20 @@
 exports.run = async (client, message, args, Discord) => {
     if (message.author.id !== process.env.HOSTID) {
-        return message.channel.embed(`**${message.authorName}**, this is only available to the host`);
+        return message.channel.embed(
+            `**${message.authorName}**, this is only available to the host`
+        );
     }
 
     if (!args.length) {
-        return message.channel.embed(`**${message.authorName}**, missing input`);
+        return message.channel.embed(
+            `**${message.authorName}**, missing input`
+        );
     }
 
     if (message.content.toLowerCase().includes("token")) {
-        return message.channel.embed(`**${message.authorName}**, at risk of token leak, returned`);
+        return message.channel.embed(
+            `**${message.authorName}**, at risk of token leak, returned`
+        );
     }
 
     let embed = new Discord.MessageEmbed().setColor(message.color);

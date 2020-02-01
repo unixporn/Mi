@@ -2,7 +2,9 @@ exports.run = async (client, message, args, Discord) => {
     let user = message.fetchUser();
 
     if (!user) {
-        return message.channel.embed(`**${message.authorName}**, I couldn't find that user`);
+        return message.channel.embed(
+            `**${message.authorName}**, I couldn't find that user`
+        );
     }
 
     const member = message.guild.members.get(user.id);
@@ -27,8 +29,16 @@ exports.run = async (client, message, args, Discord) => {
                 .setColor(message.color)
                 .setTitle(`**${member.displayName}**`)
                 .setThumbnail(user.avatarURL({ size: 2048 }))
-                .addField("Joined server", client.processTime(member.joinedTimestamp, { dateOnly: true }))
-                .addField("Created account", client.processTime(user.createdAt, { dateOnly: true }));
+                .addField(
+                    "Joined server",
+                    client.processTime(member.joinedTimestamp, {
+                        dateOnly: true
+                    })
+                )
+                .addField(
+                    "Created account",
+                    client.processTime(user.createdAt, { dateOnly: true })
+                );
 
             if (config.profile.git) {
                 embed.addField("Git", config.profile.git);

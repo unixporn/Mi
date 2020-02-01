@@ -16,7 +16,12 @@ module.exports = class extends Discord.Client {
             ws: {
                 compress: false
             },
-            disabledEvents: ["TYPING_START", "PRESENCE_UPDATE", "MESSAGE_UPDATE", "USER_UPDATE"]
+            disabledEvents: [
+                "TYPING_START",
+                "PRESENCE_UPDATE",
+                "MESSAGE_UPDATE",
+                "USER_UPDATE"
+            ]
         });
 
         //Database schema for per-guild colour role list
@@ -28,17 +33,22 @@ module.exports = class extends Discord.Client {
         this.commands = require("./commands.js");
 
         //Import message handler only once
-        this.message = (message) => require("./events/message.js")(this, message, Discord);
+        this.message = (message) =>
+            require("./events/message.js")(this, message, Discord);
 
         this.ready = () => require("./events/ready.js")(this);
 
-        this.messageDelete = (message) => require("./events/messageDelete.js")(this, message, Discord);
+        this.messageDelete = (message) =>
+            require("./events/messageDelete.js")(this, message, Discord);
 
-        this.guildMemberAdd = (member) => require("./events/guildMemberAdd.js")(this, member, Discord);
+        this.guildMemberAdd = (member) =>
+            require("./events/guildMemberAdd.js")(this, member, Discord);
 
-        this.showcase = (client, message) => require("./events/showcase.js")(client, message, Discord);
+        this.showcase = (client, message) =>
+            require("./events/showcase.js")(client, message, Discord);
 
-        this.sendLog = (message) => this.channels.get(process.env.LOGCHANNEL).send(message);
+        this.sendLog = (message) =>
+            this.channels.get(process.env.LOGCHANNEL).send(message);
 
         //Events
         this

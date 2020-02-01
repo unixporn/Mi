@@ -13,7 +13,11 @@ Discord.Structures.extend("TextChannel", (TextChannel) => {
 
                 let embed = new Discord.MessageEmbed()
                     .setDescription(body)
-                    .setColor(this.guild.me.displayHexColor != "#000000" ? this.guild.me.displayHexColor : "#FFFFFE");
+                    .setColor(
+                        this.guild.me.displayHexColor != "#000000"
+                            ? this.guild.me.displayHexColor
+                            : "#FFFFFE"
+                    );
 
                 if (options.footer && typeof options.footer === "string") {
                     embed.setFooter(options.footer);
@@ -29,7 +33,9 @@ Discord.Structures.extend("Message", (Message) => {
     return class Msg extends Message {
         constructor(client, data, channel) {
             super(client, data, channel);
-            this.authorName = this.member ? this.member.displayName : this.author.username;
+            this.authorName = this.member
+                ? this.member.displayName
+                : this.author.username;
 
             this.color = this.guild
                 ? this.guild.me.displayHexColor !== "#000000"
@@ -47,12 +53,24 @@ Discord.Structures.extend("Message", (Message) => {
                 if (this.mentions.users.size) {
                     user = this.mentions.users.first();
                 } else if (args[0]) {
-                    if (this.guild.members.find((m) => m.displayName.toLowerCase() === args.join(" ").toLowerCase())) {
+                    if (
+                        this.guild.members.find(
+                            (m) =>
+                                m.displayName.toLowerCase() ===
+                                args.join(" ").toLowerCase()
+                        )
+                    ) {
                         user = this.guild.members.find(
-                            (m) => m.displayName.toLowerCase() === args.join(" ").toLowerCase()
+                            (m) =>
+                                m.displayName.toLowerCase() ===
+                                args.join(" ").toLowerCase()
                         ).user;
                     } else {
-                        user = client.users.find((u) => u.username.toLowerCase() === args.join(" ").toLowerCase());
+                        user = client.users.find(
+                            (u) =>
+                                u.username.toLowerCase() ===
+                                args.join(" ").toLowerCase()
+                        );
                     }
                 } else {
                     user = this.author;

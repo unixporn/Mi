@@ -3,10 +3,14 @@ exports.run = (client, message, args, Discord) => {
         .setColor(message.color)
         .setTitle(`Commands for **${client.user.username}**`);
 
-    Array.from(new Set(client.commands.filter((c) => !c.meta.operatorOnly).array())).forEach((c) =>
+    Array.from(
+        new Set(client.commands.filter((c) => !c.meta.operatorOnly).array())
+    ).forEach((c) =>
         embed.addField(
             c.meta.name.toTitleCase(),
-            `\`${process.env.PREFIX || "!"}${c.meta.usage}\`\n${c.meta.description}`
+            `\`${process.env.PREFIX || "!"}${c.meta.usage}\`\n${
+                c.meta.description
+            }`
         )
     );
 

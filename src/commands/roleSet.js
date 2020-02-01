@@ -1,7 +1,8 @@
 exports.run = async (client, message, args, Discord) => {
     if (!args.length) {
         return message.channel.embed(
-            `**${message.authorName}**, use \`${process.env.PREFIX || "!"}setrole <rolename>\``
+            `**${message.authorName}**, use \`${process.env.PREFIX ||
+                "!"}setrole <rolename>\``
         );
     }
 
@@ -10,11 +11,15 @@ exports.run = async (client, message, args, Discord) => {
     if (args[0] == parseInt(args[0])) {
         role = message.guild.roles.get(args[0]);
     } else {
-        role = message.guild.roles.find((r) => r.name.toLowerCase() === args.join(" ").toLowerCase());
+        role = message.guild.roles.find(
+            (r) => r.name.toLowerCase() === args.join(" ").toLowerCase()
+        );
     }
 
     if (!role) {
-        return message.channel.embed(`**${message.authorName}**, I couldn't find that role`);
+        return message.channel.embed(
+            `**${message.authorName}**, I couldn't find that role`
+        );
     }
 
     client.RoleSchema.findOne(
@@ -45,7 +50,10 @@ exports.run = async (client, message, args, Discord) => {
 
                 try {
                     var response = await message.channel.awaitMessages(
-                        (m) => ["yes", "y", "no", "n"].includes(m.content.toLowerCase()) && m.author === message.author,
+                        (m) =>
+                            ["yes", "y", "no", "n"].includes(
+                                m.content.toLowerCase()
+                            ) && m.author === message.author,
                         {
                             max: 1,
                             time: 10000,
@@ -60,7 +68,9 @@ exports.run = async (client, message, args, Discord) => {
                 response = response.first().content.toLowerCase();
 
                 if (["no", "n"].includes(response)) {
-                    return message.channel.embed(`**${message.authorName}**, cancelled operation`);
+                    return message.channel.embed(
+                        `**${message.authorName}**, cancelled operation`
+                    );
                 }
 
                 config.colorRoles.splice(config.colorRoles.indexOf(role.id), 1);
@@ -74,7 +84,11 @@ exports.run = async (client, message, args, Discord) => {
                     .setTitle(`Updated role list for **${message.guild.name}**`)
                     .setDescription(
                         config.colorRoles
-                            .sort((a, b) => message.guild.roles.get(b).position - message.guild.roles.get(a).position)
+                            .sort(
+                                (a, b) =>
+                                    message.guild.roles.get(b).position -
+                                    message.guild.roles.get(a).position
+                            )
                             .map((r) => message.guild.roles.get(r))
                             .join("\n")
                     )

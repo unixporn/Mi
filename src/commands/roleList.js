@@ -9,7 +9,9 @@ exports.run = async (client, message, args, Discord) => {
             }
 
             if (!config && !config.colorRoles[0]) {
-                return message.channel.embed(`**${message.authorName}**, no colour roles available at this time`);
+                return message.channel.embed(
+                    `**${message.authorName}**, no colour roles available at this time`
+                );
             }
 
             message.channel.send(
@@ -17,7 +19,11 @@ exports.run = async (client, message, args, Discord) => {
                     .setColor(message.color)
                     .setDescription(
                         config.colorRoles
-                            .sort((a, b) => message.guild.roles.get(b).position - message.guild.roles.get(a).position)
+                            .sort(
+                                (a, b) =>
+                                    message.guild.roles.get(b).position -
+                                    message.guild.roles.get(a).position
+                            )
                             .map((r) => message.guild.roles.get(r))
                             .join("\n")
                     )
