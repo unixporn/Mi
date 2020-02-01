@@ -15,9 +15,7 @@ module.exports = (client, message, Discord) => {
         new Discord.MessageEmbed()
             .setColor(message.color)
             .setAuthor(message.authorName, message.author.avatarURL({ size: 2048 }))
-            .setTitle("Message Deleted")
             .setDescription(message.content)
-            .addField("Channel", message.channel)
-            .setFooter(new Date())
+            .setFooter(`Message deleted in #${message.channel.name}`)
     );
 };

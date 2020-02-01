@@ -27,10 +27,19 @@ module.exports = async (client, member, Discord) => {
                 new Discord.MessageEmbed()
                     .setColor("#FFFFFE")
                     .setAuthor(member.displayName, member.user.avatarURL({ size: 2048 }))
-                    .setTitle("Member joined")
-                    .addField("User", member)
-                    .addField("Account created", member.user.createdAt)
-                    .setFooter(new Date())
+                    .addField("Account created", new Date(member.user.createdTimestamp)
+	                    .toLocaleDateString("en-US", 
+	                    	{
+	                    		year: "numeric", 
+	                    		month: "long", 
+	                    		day: "2-digit", 
+	                    		hour: "2-digit",  
+	                    		minute: "2-digit", 
+	                    		hour12: false
+	                    	}
+	                    )
+	                 )
+                    .setFooter("Member joined")
             );
         }
     );
