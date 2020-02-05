@@ -1,34 +1,5 @@
 const Discord = require("discord.js");
 
-Discord.Structures.extend("TextChannel", (TextChannel) => {
-    return class Channel extends TextChannel {
-        constructor(guild, data) {
-            super(guild, data);
-            this.embed = (body, options) => {
-                options = options || {};
-
-                if (!body || typeof body !== "string") {
-                    return console.error("No body provided to embed method.");
-                }
-
-                let embed = new Discord.MessageEmbed()
-                    .setDescription(body)
-                    .setColor(
-                        this.guild.me.displayHexColor != "#000000"
-                            ? this.guild.me.displayHexColor
-                            : "#FFFFFE"
-                    );
-
-                if (options.footer && typeof options.footer === "string") {
-                    embed.setFooter(options.footer);
-                }
-
-                this.send(embed);
-            };
-        }
-    };
-});
-
 Discord.Structures.extend("Message", (Message) => {
     return class Msg extends Message {
         constructor(client, data, channel) {
@@ -37,11 +8,12 @@ Discord.Structures.extend("Message", (Message) => {
                 ? this.member.displayName
                 : this.author.username;
 
-            this.color = this.guild
-                ? this.guild.me.displayHexColor !== "#000000"
+            // Due to a bug on Discord's side, #ffffff does not appear correctly so we set it to #fffffe\
+            this.color =
+                this.guild &&
+                !["#000000", "#ffffff"].includes(this.guild.me.displayHexColor)
                     ? this.guild.me.displayHexColor
-                    : "#FFFFFE"
-                : "#FFFFFE";
+                    : "#fffffe";
 
             this.fetchUser = (options) => {
                 options = options || {};
@@ -77,6 +49,38 @@ Discord.Structures.extend("Message", (Message) => {
                 }
 
                 return options.member ? this.guild.members.get(user) : user;
+            };
+        }
+    };
+});
+
+Discord.Structures.extend("TextChannel", (TextChannel) => {
+    return class Channel extends TextChannel {
+        constructor(guild, data) {
+            super(guild, data);
+            this.embed = (body, options) => {
+                options = options || {};
+
+                if (!body || typeof body !== "string") {
+                    return console.error("No body provided to embed method.");
+                }
+
+                let embed = new Discord.MessageEmbed()
+                    .setDescription(body)
+                    .setColor(
+                        this.guild &&
+                            !["#000000", "#ffffff"].includes(
+                                this.guild.me.displayHexColor
+                            )
+                            ? this.guild.me.displayHexColor
+                            : "#fffffe"
+                    );
+
+                if (options.footer && typeof options.footer === "string") {
+                    embed.setFooter(options.footer);
+                }
+
+                this.send(embed);
             };
         }
     };

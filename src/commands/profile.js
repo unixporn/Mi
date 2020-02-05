@@ -20,9 +20,17 @@ exports.run = async (client, message, args, Discord) => {
             }
 
             if (!config) {
-                return message.channel.embed(
-                    `**${message.authorName}**, you shouldn't be seeing this... just like... ignore it?`
-                );
+                config = new client.UserSchema({
+                    id: user.id,
+                    guild: message.guild.id,
+                    profile: {
+                        git: "",
+                        dotfiles: "",
+                        description: ""
+                    }
+                })
+                    .save()
+                    .catch((e) => console.error(e));
             }
 
             const embed = new Discord.MessageEmbed()
@@ -31,13 +39,31 @@ exports.run = async (client, message, args, Discord) => {
                 .setThumbnail(user.avatarURL({ size: 2048 }))
                 .addField(
                     "Joined server",
-                    client.processTime(member.joinedTimestamp, {
-                        dateOnly: true
-                    })
+                    new Date(member.joinedTimestamp).toLocaleDateString(
+                        "en-US",
+                        {
+                            year: "numeric",
+                            month: "long",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: false
+                        }
+                    )
                 )
                 .addField(
-                    "Created account",
-                    client.processTime(user.createdAt, { dateOnly: true })
+                    "Account created",
+                    new Date(member.user.createdTimestamp).toLocaleDateString(
+                        "en-US",
+                        {
+                            year: "numeric",
+                            month: "long",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: false
+                        }
+                    )
                 );
 
             if (config.profile.git) {

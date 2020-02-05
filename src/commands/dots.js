@@ -9,6 +9,20 @@ exports.run = async (client, message, args, Discord) => {
                 return console.error(error);
             }
 
+            if (!config) {
+                config = new client.UserSchema({
+                    id: user.id,
+                    guild: message.guild.id,
+                    profile: {
+                        git: "",
+                        dotfiles: "",
+                        description: ""
+                    }
+                })
+                    .save()
+                    .catch((e) => console.error(e));
+            }
+
             if (
                 args[0] &&
                 ["clear", "remove"].includes(args[0].toLowerCase())
