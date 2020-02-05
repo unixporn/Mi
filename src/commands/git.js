@@ -11,7 +11,7 @@ exports.run = async (client, message, args, Discord) => {
 
             if (!config) {
                 config = new client.UserSchema({
-                    id: user.id,
+                    id: message.author.id,
                     guild: message.guild.id,
                     profile: {
                         git: "",
