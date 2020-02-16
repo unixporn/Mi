@@ -17,9 +17,7 @@ exports.run = (client, message, args, Discord) => {
     ).forEach((c) =>
         embed.addField(
             c.meta.name.toTitleCase(),
-            `\`${process.env.PREFIX || "!"}${c.meta.usage}\`\n${
-                c.meta.description
-            }`
+            `\`${c.meta.usage}\`\n${c.meta.description}`
         )
     );
 
