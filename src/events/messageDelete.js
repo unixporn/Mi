@@ -16,7 +16,7 @@ module.exports = (client, message, Discord) => {
             .setColor(message.color)
             .setAuthor(
                 message.authorName,
-                message.author.avatarURL({ size: 2048 })
+                message.author.avatarURL({ size: 256 })
             )
             .setDescription(message.content)
             .setFooter(`Message deleted in #${message.channel.name}`)

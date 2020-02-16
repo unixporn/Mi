@@ -1,7 +1,10 @@
 exports.run = async (client, message, args, Discord) => {
-    if (!args[0]) {
-        return message.channel.embed(
-            `**${message.authorName}**, please provide a question \`.poll <question>\``
+    if (!args.length) {
+        return message.channel.send(
+            client
+                .commandHelp("poll")
+                .setColor(message.color)
+                .setTitle("Usage:")
         );
     }
 
@@ -28,6 +31,6 @@ exports.run = async (client, message, args, Discord) => {
 exports.meta = {
     operatorOnly: false,
     name: "poll",
-    usage: "poll <question>",
+    usage: `${process.env.PREFIX || "!"}poll <question>`,
     description: "Starts a poll for input question"
 };

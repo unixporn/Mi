@@ -8,7 +8,10 @@ Discord.Structures.extend("Message", (Message) => {
                 ? this.member.displayName
                 : this.author.username;
 
-            // Due to a bug on Discord's side, #ffffff does not appear correctly so we set it to #fffffe\
+            /*Due to a bug on Discord's side, 
+            #ffffff does not appear correctly 
+            so we set it to #fffffe*/
+
             this.color =
                 this.guild &&
                 !["#000000", "#ffffff"].includes(this.guild.me.displayHexColor)
@@ -26,19 +29,19 @@ Discord.Structures.extend("Message", (Message) => {
                     user = this.mentions.users.first();
                 } else if (args[0]) {
                     if (
-                        this.guild.members.find(
+                        this.guild.members.cache.find(
                             (m) =>
                                 m.displayName.toLowerCase() ===
                                 args.join(" ").toLowerCase()
                         )
                     ) {
-                        user = this.guild.members.find(
+                        user = this.guild.members.cache.find(
                             (m) =>
                                 m.displayName.toLowerCase() ===
                                 args.join(" ").toLowerCase()
                         ).user;
                     } else {
-                        user = client.users.find(
+                        user = client.users.cache.find(
                             (u) =>
                                 u.username.toLowerCase() ===
                                 args.join(" ").toLowerCase()
@@ -48,7 +51,9 @@ Discord.Structures.extend("Message", (Message) => {
                     user = this.author;
                 }
 
-                return options.member ? this.guild.members.get(user) : user;
+                return options.member
+                    ? this.guild.members.cache.get(user)
+                    : user;
             };
         }
     };

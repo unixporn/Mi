@@ -28,7 +28,7 @@ module.exports = async (client, member, Discord) => {
                     .setColor("#FFFFFE")
                     .setAuthor(
                         member.displayName,
-                        member.user.avatarURL({ size: 2048 })
+                        member.user.avatarURL({ size: 256 })
                     )
                     .addField(
                         "Account created",

@@ -18,6 +18,6 @@ exports.run = (client, message, args, Discord) => {
 exports.meta = {
     operatorOnly: false,
     name: "avatar",
-    usage: "pfp <user>",
+    usage: `${process.env.PREFIX || "!"}pfp <user>`,
     description: "Shows avatar of @mentioned user or self"
 };
