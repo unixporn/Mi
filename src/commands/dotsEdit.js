@@ -1,4 +1,8 @@
 exports.run = async (client, message, args, Discord) => {
+    if (!args.length) {
+        return client.commandHelp(message);
+    }
+
     client.UserSchema.findOne(
         {
             id: message.author.id,
@@ -10,34 +14,29 @@ exports.run = async (client, message, args, Discord) => {
             }
 
             if (!config) {
-                config = await new client.UserSchema({
-                    id: message.author.id,
-                    guild: message.guild.id,
-                    profile: {
-                        git: "",
-                        dotfiles: "",
-                        description: ""
-                    }
-                })
+                config = new client.UserSchema(
+                    Object.assign(client.settings.UserSchema.default, {
+                        id: message.author.id,
+                        guild: message.guild.id
+                    })
+                )
                     .save()
                     .catch((e) => console.error(e));
             }
 
             if (
-                args.length &&
+                args[0] &&
                 ["clear", "remove"].includes(args[0].toLowerCase())
             ) {
-                if (!config.profile.git) {
+                if (!config.profile.dotfiles) {
                     return message.channel.embed(
-                        `**${message.authorName}**, nothing to remove`
+                        `**${message.authorDisplayName}**, nothing to remove`
                     );
                 }
 
                 message.channel.embed(
-                    `**${message.authorName}**, are you sure you want to clear your profile git?`,
-                    {
-                        footer: "yes / no"
-                    }
+                    `**${message.authorDisplayName}**, are you sure you want to clear your profile dotfiles?`,
+                    { footer: "yes / no" }
                 );
 
                 try {
@@ -48,53 +47,48 @@ exports.run = async (client, message, args, Discord) => {
                             ) && m.author === message.author,
                         {
                             max: 1,
-                            time: 10000,
+                            time: client.settings.confirmDialogues.timeout,
                             errors: ["time"]
                         }
                     );
                 } catch (err) {
                     return message.channel.embed(
-                        `**${message.authorName}**, cancelled selection, missing or invalid input`
+                        `**${message.authorDisplayName}**, cancelled selection, missing or invalid input`
                     );
                 }
                 response = response.first().content.toLowerCase();
 
                 if (["no", "n"].includes(response)) {
                     return message.channel.embed(
-                        `**${message.authorName}**, cancelled operation`
+                        `**${message.authorDisplayName}**, cancelled operation`
                     );
                 }
 
-                config.profile.git = "";
+                config.profile.dotfiles = "";
 
                 message.channel.embed(
-                    `Removed **git** from user **${message.author}**`
+                    `Removed **dotfiles** from **${message.author}**`
                 );
             } else if (args.length) {
                 if (args[0].match("(https?:\\/\\/[^\\s]+)")) {
                     if (args[0].length <= 128) {
-                        config.profile.git = args[0];
+                        config.profile.dotfiles = args[0];
 
                         message.channel.embed(
-                            `Set **git** of user **${message.author}** to **${config.profile.git}**`
+                            `Set **dotfiles** of **${message.author}** to **${config.profile.dotfiles}**`
                         );
                     } else {
                         return message.channel.embed(
-                            `**${message.authorName}**, maximum length 128 characters`
+                            `**${message.authorDisplayName}**, maximum length 128 characters`
                         );
                     }
                 } else {
                     return message.channel.embed(
-                        `**${message.authorName}**, \`${args[0]}\` is not a valid URL`
+                        `**${message.authorDisplayName}**, *${args[0]}* is not a valid URL`
                     );
                 }
             } else {
-                return message.channel.embed(
-                    config.profile.git
-                        ? `**Git** for ${message.author} **${config.profile.git}**`
-                        : `**${message.authorName}**, use \`${process.env
-                              .PREFIX || "!"}git <url>\``
-                );
+                client.commandHelp(message);
             }
 
             config.save().catch((e) => console.error(e));
@@ -104,7 +98,7 @@ exports.run = async (client, message, args, Discord) => {
 
 exports.meta = {
     operatorOnly: false,
-    name: "user git",
-    usage: `${process.env.PREFIX || "!"}git <url>`,
-    description: "Adds git link to your profile"
+    name: "user dots",
+    usage: `${process.env.PREFIX || "!"}dots <url>`,
+    description: "Adds dotfiles link to your profile"
 };

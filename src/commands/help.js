@@ -1,10 +1,16 @@
 exports.run = (client, message, args, Discord) => {
     if (args.length && client.commands.get(args.join(" "))) {
+        if (!client.commands.get(args.join(" "))) {
+            throw new RangeError(`"${args.join(" ")}" is not a command.`);
+        }
+
         return message.channel.send(
-            client
-                .commandHelp(args.join(" "))
+            new Discord.MessageEmbed()
                 .setColor(message.color)
-                .setTitle("Usage:")
+                .addField(
+                    command.meta.description.toTitleCase(),
+                    `\`\`\`${command.meta.usage}\`\`\``
+                )
         );
     }
 
@@ -17,7 +23,7 @@ exports.run = (client, message, args, Discord) => {
     ).forEach((c) =>
         embed.addField(
             c.meta.name.toTitleCase(),
-            `\`${c.meta.usage}\`\n${c.meta.description}`
+            `\`\`\`${c.meta.usage}\`\`\`\n${c.meta.description}`
         )
     );
 

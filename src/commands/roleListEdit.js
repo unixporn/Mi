@@ -20,7 +20,7 @@ exports.run = async (client, message, args, Discord) => {
 
     if (!role) {
         return message.channel.embed(
-            `**${message.authorName}**, I couldn't find that role`
+            `**${message.authorDisplayName}**, I couldn't find that role`
         );
     }
 
@@ -46,7 +46,7 @@ exports.run = async (client, message, args, Discord) => {
 
             if (config.colorRoles.includes(role.id)) {
                 message.channel.embed(
-                    `**${message.authorName}**, are you sure you want to **remove** ${role} from the role list?`,
+                    `**${message.authorDisplayName}**, are you sure you want to **remove** ${role} from the role list?`,
                     { footer: "yes / no" }
                 );
 
@@ -58,20 +58,20 @@ exports.run = async (client, message, args, Discord) => {
                             ) && m.author === message.author,
                         {
                             max: 1,
-                            time: 10000,
+                            time: client.settings.confirmDialogues.timeout,
                             errors: ["time"]
                         }
                     );
                 } catch (err) {
                     return message.channel.embed(
-                        `**${message.authorName}**, cancelled selection, missing or invalid input`
+                        `**${message.authorDisplayName}**, cancelled selection, missing or invalid input`
                     );
                 }
                 response = response.first().content.toLowerCase();
 
                 if (["no", "n"].includes(response)) {
                     return message.channel.embed(
-                        `**${message.authorName}**, cancelled operation`
+                        `**${message.authorDisplayName}**, cancelled operation`
                     );
                 }
 

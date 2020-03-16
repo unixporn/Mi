@@ -14,7 +14,7 @@ module.exports = (client, message, Discord) => {
                             message.channel
                         }** is for showcasing your creations (rices, applications, creative work).
 **Questions** about ricing belong in ${message.guild.channels.cache.get(
-                            process.env.RICINGCHANNEL
+                            client.settings.ricingChannel
                         )}.`
                     )
                     .addField("You said", message.content.substring(0, 512))
@@ -26,7 +26,7 @@ module.exports = (client, message, Discord) => {
                 new Discord.MessageEmbed()
                     .setColor(message.color)
                     .setAuthor(
-                        message.authorName,
+                        message.authorDisplayName,
                         message.author.avatarURL({ size: 2048 })
                     )
                     .setTitle("Improper Showcase Submission")

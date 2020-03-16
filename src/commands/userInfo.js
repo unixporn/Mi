@@ -1,9 +1,20 @@
+const handleDate = (date) => {
+    return new Date(date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false
+    });
+};
+
 exports.run = async (client, message, args, Discord) => {
     let user = message.fetchUser();
 
     if (!user) {
         return message.channel.embed(
-            `**${message.authorName}**, I couldn't find that user`
+            `**${message.authorDisplayName}**, I couldn't find that user`
         );
     }
 
@@ -20,50 +31,32 @@ exports.run = async (client, message, args, Discord) => {
             }
 
             if (!config) {
-                config = await new client.UserSchema({
-                    id: user.id,
-                    guild: message.guild.id,
-                    profile: {
-                        git: "",
-                        dotfiles: "",
-                        description: ""
-                    }
-                })
+                config = new client.UserSchema(
+                    Object.assign(client.settings.UserSchema.default, {
+                        id: message.author.id,
+                        guild: message.guild.id
+                    })
+                )
                     .save()
                     .catch((e) => console.error(e));
             }
+
+            await config;
 
             const embed = new Discord.MessageEmbed()
                 .setColor(message.color)
                 .setTitle(`**${member.displayName}**`)
                 .setThumbnail(user.avatarURL({ size: 2048 }))
-                .addField(
-                    "Joined server",
-                    new Date(member.joinedTimestamp).toLocaleDateString(
-                        "en-US",
-                        {
-                            year: "numeric",
-                            month: "long",
-                            day: "2-digit",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: false
-                        }
-                    )
-                )
+                .addField("Joined server", handleDate(member.joinedTimestamp))
                 .addField(
                     "Account created",
-                    new Date(member.user.createdTimestamp).toLocaleDateString(
-                        "en-US",
-                        {
-                            year: "numeric",
-                            month: "long",
-                            day: "2-digit",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: false
-                        }
-                    )
+                    handleDate(member.user.createdTimestamp)
+                )
+                .addField("Points", Math.floor(config.score))
+                .addField(
+                    "Roles",
+                    member.roles.cache.map((r) => r).join(" "),
+                    true
                 );
 
             if (config.profile.git) {

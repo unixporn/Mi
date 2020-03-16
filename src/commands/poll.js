@@ -1,11 +1,6 @@
-exports.run = async (client, message, args, Discord) => {
+exports.run = (client, message, args, Discord) => {
     if (!args.length) {
-        return message.channel.send(
-            client
-                .commandHelp("poll")
-                .setColor(message.color)
-                .setTitle("Usage:")
-        );
+        return client.commandHelp(message);
     }
 
     message.channel
@@ -14,7 +9,7 @@ exports.run = async (client, message, args, Discord) => {
                 .setColor(message.color)
                 .setTitle("Poll:")
                 .setDescription(args.join(" "))
-                .setFooter(`From ${message.authorName}`)
+                .setFooter(`From ${message.authorDisplayName}`)
         )
         .then((msg) => {
             msg.react("✅");
@@ -23,8 +18,8 @@ exports.run = async (client, message, args, Discord) => {
                 timeout: 1000
             });
         })
-        .catch((error) => {
-            console.log(error);
+        .catch((e) => {
+            console.error(e);
         });
 };
 

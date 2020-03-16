@@ -1,11 +1,6 @@
 exports.run = async (client, message, args, Discord) => {
     if (!args.length) {
-        return message.channel.send(
-            client
-                .commandHelp("role")
-                .setColor(message.color)
-                .setTitle("Usage:")
-        );
+        return client.commandHelp(message);
     }
 
     if (args[0] === "list") {
@@ -23,7 +18,9 @@ exports.run = async (client, message, args, Discord) => {
 
     if (!role) {
         return message.channel.embed(
-            `**${message.authorName}**, role \`${args.join(" ")}\` not found`
+            `**${message.authorDisplayName}**, role *${args.join(
+                " "
+            )}* not found`
         );
     }
 
@@ -57,7 +54,7 @@ exports.run = async (client, message, args, Discord) => {
                 }
             } else {
                 message.channel.embed(
-                    `**${message.authorName}**, role ${role} unavailable`
+                    `**${message.authorDisplayName}**, role ${role} unavailable`
                 );
             }
         }

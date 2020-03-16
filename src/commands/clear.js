@@ -3,7 +3,7 @@ exports.run = async (client, message, args, Discord) => {
 
     if (user === message.author && args.length) {
         return message.channel.embed(
-            `**${message.authorName}**, if you want to clear your own profile use \`${process.env.PREFIX}clear\``
+            `**${message.authorDisplayName}**, if you want to clear your own profile use \`\`\`${process.env.PREFIX}clear\`\`\``
         );
     }
 
@@ -22,19 +22,19 @@ exports.run = async (client, message, args, Discord) => {
                 !message.member.hasPermission("MANAGE_GUILD")
             ) {
                 return message.channel.embed(
-                    `**${message.authorName}**, you cannot clear the profile of other users`
+                    `**${message.authorDisplayName}**, you cannot clear the profile of other users`
                 );
             }
 
             if (!config || !config.profile) {
                 return message.channel.embed(
-                    `**${message.authorName}**, nothing to clear`
+                    `**${message.authorDisplayName}**, nothing to clear`
                 );
             }
 
             message.channel.embed(
-                `**${message.authorName}**, are you sure you want to **clear** the profile of user ${user}?`,
-                { footer: "yes / no" }
+                `**${message.authorDisplayName}**, are you sure y ou want to **clear** the profile of user ${user}?`,
+                { footer: "Yes or no..." }
             );
 
             try {
@@ -45,20 +45,20 @@ exports.run = async (client, message, args, Discord) => {
                         ) && m.author === message.author,
                     {
                         max: 1,
-                        time: 10000,
+                        time: client.settings.confirmDialogues.timeout,
                         errors: ["time"]
                     }
                 );
             } catch (err) {
                 return message.channel.embed(
-                    `**${message.authorName}**, cancelled selection, missing or invalid input`
+                    `**${message.authorDisplayName}**, cancelled selection, missing or invalid input`
                 );
             }
             response = response.first().content.toLowerCase();
 
             if (["no", "n"].includes(response)) {
                 return message.channel.embed(
-                    `**${message.authorName}**, cancelled operation`
+                    `**${message.authorDisplayName}**, cancelled operation`
                 );
             }
 

@@ -1,5 +1,5 @@
-module.exports = async (client, member, Discord) => {
-    await client.UserSchema.findOne(
+module.exports = (client, member, Discord) => {
+    client.UserSchema.findOne(
         {
             id: member.id,
             guild: member.guild.id
@@ -10,17 +10,12 @@ module.exports = async (client, member, Discord) => {
             }
 
             if (!config) {
-                config = new client.UserSchema({
-                    id: member.id,
-                    guild: member.guild.id,
-                    profile: {
-                        git: "",
-                        dotfiles: "",
-                        description: ""
-                    }
-                })
-                    .save()
-                    .catch((e) => console.error(e));
+                config = new client.UserSchema(
+                    Object.assign(client.settings.UserSchema.default, {
+                        id: member.id,
+                        guild: member.guild.id
+                    })
+                );
             }
 
             client.sendLog(
@@ -36,11 +31,8 @@ module.exports = async (client, member, Discord) => {
                             member.user.createdTimestamp
                         ).toLocaleDateString("en-US", {
                             year: "numeric",
-                            month: "long",
-                            day: "2-digit",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: false
+                            month: "short",
+                            day: "2-digit"
                         })
                     )
                     .setFooter("Member joined")

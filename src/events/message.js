@@ -3,15 +3,22 @@ module.exports = async (client, message, Discord) => {
         return;
     }
 
-    if (message.channel.id === process.env.SHOWCASECHANNEL) {
+    if (message.channel.id === client.settings.showcaseChannel) {
         return client.showcase(client, message);
     }
 
+    if (client.settings.userScore.enable) {
+        client.handleMessageScore(message);
+    }
     const prefix = process.env.PREFIX || "!";
 
     let msg = message.content.split(" "),
         args = msg.slice(1),
         cmd = msg[0].toLowerCase().substring(prefix.length);
+
+    if (args[0] === "help") {
+        return client.commandHelp(message);
+    }
 
     if (
         message.content.startsWith(prefix + cmd) &&

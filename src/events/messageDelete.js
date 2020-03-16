@@ -4,7 +4,7 @@ module.exports = (client, message, Discord) => {
     }
 
     if (
-        message.channel.id === process.env.SHOWCASECHANNEL &&
+        message.channel.id === client.settings.showcaseChannel &&
         !message.attachments.size &&
         !message.content.match("(https?:\\/\\/[^\\s]+)")
     ) {
@@ -15,7 +15,7 @@ module.exports = (client, message, Discord) => {
         new Discord.MessageEmbed()
             .setColor(message.color)
             .setAuthor(
-                message.authorName,
+                message.authorDisplayName,
                 message.author.avatarURL({ size: 256 })
             )
             .setDescription(message.content)

@@ -24,9 +24,6 @@ Create a `.env` file with the following variables.
 TOKEN=bot token
 MONGO=mongodb remote token
 PREFIX=prefix for commands, ideally a single char, defaults to ! if unset
-SHOWCASECHANNEL=showcase channel id for automod
-LOGCHANNEL=modlog channel id
-RICINGCHANNEL=ricing channel id
 HOSTID=discord user id of host, for eval restriction
 ```
 

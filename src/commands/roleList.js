@@ -1,4 +1,4 @@
-exports.run = async (client, message, args, Discord) => {
+exports.run = (client, message, args, Discord) => {
     client.RoleSchema.findOne(
         {
             id: message.guild.id
@@ -10,7 +10,7 @@ exports.run = async (client, message, args, Discord) => {
 
             if (!config && !config.colorRoles[0]) {
                 return message.channel.embed(
-                    `**${message.authorName}**, no colour roles available at this time`
+                    `**${message.authorDisplayName}**, no colour roles available at this time`
                 );
             }
 

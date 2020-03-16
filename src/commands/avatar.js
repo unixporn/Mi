@@ -10,7 +10,7 @@ exports.run = (client, message, args, Discord) => {
         );
     } else {
         return message.channel.embed(
-            `**${message.authorName}**, I can't find that user`
+            `**${message.authorDisplayName}**, I can't find that user`
         );
     }
 };

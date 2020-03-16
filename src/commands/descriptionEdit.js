@@ -1,11 +1,6 @@
 exports.run = async (client, message, args, Discord) => {
     if (!args.length) {
-        return message.channel.send(
-            client
-                .commandHelp("desc")
-                .setColor(message.color)
-                .setTitle("Usage:")
-        );
+        return client.commandHelp(message);
     }
 
     client.UserSchema.findOne(
@@ -19,15 +14,12 @@ exports.run = async (client, message, args, Discord) => {
             }
 
             if (!config) {
-                config = await new client.UserSchema({
-                    id: message.author.id,
-                    guild: message.guild.id,
-                    profile: {
-                        git: "",
-                        dotfiles: "",
-                        description: ""
-                    }
-                })
+                config = new client.UserSchema(
+                    Object.assign(client.settings.UserSchema.default, {
+                        id: message.author.id,
+                        guild: message.guild.id
+                    })
+                )
                     .save()
                     .catch((e) => console.error(e));
             }
@@ -35,12 +27,12 @@ exports.run = async (client, message, args, Discord) => {
             if (["clear", "remove"].includes(args[0].toLowerCase())) {
                 if (!config.profile.description) {
                     return message.channel.embed(
-                        `**${message.authorName}**, nothing to remove.`
+                        `**${message.authorDisplayName}**, nothing to remove.`
                     );
                 }
 
                 message.channel.embed(
-                    `**${message.authorName}**, are you sure you want to clear your profile description?`,
+                    `**${message.authorDisplayName}**, are you sure you want to clear your profile description?`,
                     { footer: "yes / no" }
                 );
 
@@ -52,38 +44,38 @@ exports.run = async (client, message, args, Discord) => {
                             ) && m.author === message.author,
                         {
                             max: 1,
-                            time: 10000,
+                            time: client.settings.confirmDialogues.timeout,
                             errors: ["time"]
                         }
                     );
                 } catch (err) {
                     return message.channel.embed(
-                        `**${message.authorName}**, cancelled selection, missing or invalid input.`
+                        `**${message.authorDisplayName}**, cancelled selection, missing or invalid input.`
                     );
                 }
                 response = response.first().content.toLowerCase();
 
                 if (["no", "y"].includes(response)) {
                     return message.channel.embed(
-                        `**${message.authorName}**, cancelled operation.`
+                        `**${message.authorDisplayName}**, cancelled operation.`
                     );
                 }
 
                 config.profile.dotfiles = "";
 
                 message.channel.embed(
-                    `Removed **description** from user **${client.authorName}**.`
+                    `Removed **description** from user **${message.author}**.`
                 );
             } else if (args) {
                 if (args.join(" ").length <= 256) {
                     config.profile.description = args.join(" ");
 
                     message.channel.embed(
-                        `Set **description** of user **${client.authorName}**.`
+                        `Set **description** of user **${message.author}**.`
                     );
                 } else {
                     return message.channel.embed(
-                        `**${message.authorName}**, maximum length 256 characters.`
+                        `**${message.authorDisplayName}**, maximum length 256 characters.`
                     );
                 }
             }

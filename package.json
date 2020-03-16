@@ -1,7 +1,6 @@
 {
-    "name": "Mi",
-    "version": "1.0.0",
-    "description": "",
+    "name": "mi",
+    "version": "2.0.0",
     "main": "index.js",
     "author": "Slepe",
     "homepage": "https://github.com/unixporn/Mi",
@@ -12,6 +11,8 @@
     "dependencies": {
         "discord.js": "github:discordjs/discord.js",
         "dotenv": "^8.2.0",
-        "mongoose": "^5.8.3"
+        "mongoose": "^5.8.3",
+        "mongoose-float": "^1.0.4",
+        "ms": "^2.1.2"
     }
 }

@@ -1,7 +1,7 @@
 exports.run = async (client, message, args, Discord) => {
     if (message.author.id !== process.env.HOSTID) {
         return message.channel.embed(
-            `**${message.authorName}**, this is only available to the host`
+            `**${message.authorDisplayName}**, this is only available to the host`
         );
     }
 
@@ -16,7 +16,7 @@ exports.run = async (client, message, args, Discord) => {
 
     if (message.content.toLowerCase().includes("token")) {
         return message.channel.embed(
-            `**${message.authorName}**, at risk of token leak, returned`
+            `**${message.authorDisplayName}**, at risk of token leak, returned`
         );
     }
 

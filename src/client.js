@@ -1,7 +1,11 @@
 require("dotenv").config();
 const Discord = require("discord.js");
 
-require("./extensions.js");
+require("./utilities/messageAuthorDisplayName.js");
+require("./utilities/messageColor.js");
+require("./utilities/messageFetchUser.js");
+require("./utilities/stringToTitleCase.js");
+require("./utilities/textChannelEmbed.js");
 
 module.exports = class extends Discord.Client {
     constructor() {
@@ -22,12 +26,14 @@ module.exports = class extends Discord.Client {
             disabledEvents: [
                 "TYPING_START",
                 "PRESENCE_UPDATE",
-                "MESSAGE_UPDATE",
                 "USER_UPDATE",
                 "WEBHOOKS_UPDATE",
                 "MESSAGE_REACTION_ADD"
             ]
         });
+
+        //Settings file
+        this.settings = require("./settings.json");
 
         //Database schema for per-guild colour role list
         this.RoleSchema = require("./models/roleSchema.js");
@@ -53,13 +59,27 @@ module.exports = class extends Discord.Client {
             require("./events/showcase.js")(client, message, Discord);
 
         this.sendLog = (message) =>
-            this.channels.cache.get(process.env.LOGCHANNEL).send(message);
+            this.channels.cache.get(this.settings.logChannel).send(message);
 
         this.commandHelp = (name) =>
-            require("./commandHelp.js")(this, Discord, name);
+            require("./utilities/miFetchCommandHelp.js")(this, name);
 
-        //Events
-        this.on("ready", () => this.ready())
+        this.handleMessageScore = (message) =>
+            require("./events/handleMessageScore.js")(this, message);
+
+        this.log = (log) =>
+            require("./events/handleLog.js")(this, log, Discord);
+
+        this.createUserSchema = (user, guild) =>
+            require("./createUserSchema.js")(this, user, guild);
+
+        this.on("userScoreUpdate", (scoreUpdate) =>
+            require("./events/userScoreUpdate.js")(this, scoreUpdate)
+        );
+
+        this
+            //Events
+            .on("ready", () => this.ready())
 
             .on("reconnect", () => this.ready())
 
@@ -74,6 +94,17 @@ module.exports = class extends Discord.Client {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
+
+        process
+            .on("unhandledRejection", (error) => {
+                this.log(error.message);
+            })
+            .on("uncaughtException", (error) => {
+                this.log(error.message);
+            })
+            .on("warning", (error) => {
+                this.log(error.message);
+            });
 
         this.login(process.env.TOKEN);
     }
