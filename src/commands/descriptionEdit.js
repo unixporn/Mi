@@ -64,14 +64,14 @@ exports.run = async (client, message, args, Discord) => {
                 config.profile.dotfiles = "";
 
                 message.channel.embed(
-                    `Removed **description** from user **${message.author}**.`
+                    `Removed **description** from user **${message.authorDisplayName}**.`
                 );
             } else if (args) {
                 if (args.join(" ").length <= 256) {
                     config.profile.description = args.join(" ");
 
                     message.channel.embed(
-                        `Set **description** of user **${message.author}**.`
+                        `Set **description** of user **${message.authorDisplayName}**.`
                     );
                 } else {
                     return message.channel.embed(
