@@ -10,7 +10,7 @@ exports.run = async (client, message, args, Discord) => {
             }
 
             if (!config) {
-                config = new client.UserSchema({
+                config = await new client.UserSchema({
                     id: message.author.id,
                     guild: message.guild.id,
                     profile: {
@@ -103,6 +103,6 @@ exports.run = async (client, message, args, Discord) => {
 exports.meta = {
     operatorOnly: false,
     name: "user dots",
-    usage: "dots <url>",
+    usage: `${process.env.PREFIX || "!"}dots <url>`,
     description: "Adds dotfiles link to your profile"
 };

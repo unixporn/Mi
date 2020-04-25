@@ -78,6 +78,6 @@ exports.run = async (client, message, args, Discord) => {
 exports.meta = {
     operatorOnly: true,
     name: "user clear",
-    usage: "purge <user>",
+    usage: `${process.env.PREFIX || "!"}purge <user>`,
     description: "Clears custom entries on user profile"
 };

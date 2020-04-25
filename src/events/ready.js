@@ -5,6 +5,6 @@ module.exports = (client) => {
             type: "WATCHING",
             name: `for ${process.env.PREFIX || "!"}help`
         },
-        status: "dnd"
+        status: "online"
     });
 };

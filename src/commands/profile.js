@@ -7,20 +7,20 @@ exports.run = async (client, message, args, Discord) => {
         );
     }
 
-    const member = message.guild.members.get(user.id);
+    const member = message.guild.members.cache.get(user.id);
 
     client.UserSchema.findOne(
         {
             id: user.id,
             guild: message.guild.id
         },
-        (error, config) => {
+        async (error, config) => {
             if (error) {
                 return console.error(error);
             }
 
             if (!config) {
-                config = new client.UserSchema({
+                config = await new client.UserSchema({
                     id: user.id,
                     guild: message.guild.id,
                     profile: {
@@ -86,6 +86,6 @@ exports.run = async (client, message, args, Discord) => {
 exports.meta = {
     operatorOnly: false,
     name: "user profile",
-    usage: "profile <user>",
+    usage: `${process.env.PREFIX || "!"}profile <user>`,
     description: "Displays profile for input user"
 };

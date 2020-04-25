@@ -8,11 +8,14 @@ module.exports = class extends Discord.Client {
         super({
             //Disables @everyone ping
             disableEveryone: true,
+            //Optimizations, some unnecessary but useful in case of API changes
             autoReconnect: true,
             fetchAllMembers: true,
             messageCacheMaxSize: 50,
             messageCacheLifetime: 120,
             messageSweepInterval: 120,
+            restTimeOffset: 2500,
+            restSweepInterval: 30,
             ws: {
                 compress: false
             },
@@ -20,7 +23,9 @@ module.exports = class extends Discord.Client {
                 "TYPING_START",
                 "PRESENCE_UPDATE",
                 "MESSAGE_UPDATE",
-                "USER_UPDATE"
+                "USER_UPDATE",
+                "WEBHOOKS_UPDATE",
+                "MESSAGE_REACTION_ADD"
             ]
         });
 
@@ -48,19 +53,18 @@ module.exports = class extends Discord.Client {
             require("./events/showcase.js")(client, message, Discord);
 
         this.sendLog = (message) =>
-            this.channels.get(process.env.LOGCHANNEL).send(message);
+            this.channels.cache.get(process.env.LOGCHANNEL).send(message);
+
+        this.commandHelp = (name) =>
+            require("./commandHelp.js")(this, Discord, name);
 
         //Events
-        this
-            //Ready
-            .on("ready", () => this.ready())
+        this.on("ready", () => this.ready())
 
             .on("reconnect", () => this.ready())
 
-            //Message
             .on("message", (message) => this.message(message))
 
-            //Update config on member join
             .on("guildMemberAdd", (member) => this.guildMemberAdd(member))
 
             .on("messageDelete", (message) => this.messageDelete(message));

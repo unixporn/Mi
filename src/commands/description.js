@@ -1,9 +1,10 @@
 exports.run = async (client, message, args, Discord) => {
     if (!args.length) {
-        return message.channel.embed(
-            `**${message.authorName}**, use \`${process.env.PREFIX ||
-                "!"}description <info>\` or \`${process.env.PREFIX ||
-                "!"}description clear\``
+        return message.channel.send(
+            client
+                .commandHelp("desc")
+                .setColor(message.color)
+                .setTitle("Usage:")
         );
     }
 
@@ -18,7 +19,7 @@ exports.run = async (client, message, args, Discord) => {
             }
 
             if (!config) {
-                config = new client.UserSchema({
+                config = await new client.UserSchema({
                     id: message.author.id,
                     guild: message.guild.id,
                     profile: {
@@ -95,6 +96,7 @@ exports.run = async (client, message, args, Discord) => {
 exports.meta = {
     operatorOnly: false,
     name: "user description",
-    usage: "desc <description>",
+    usage: `${process.env.PREFIX || "!"}desc <info> or ${process.env.PREFIX ||
+        "!"}desc clear`,
     description: "Adds a description to your profile, 256 characters max"
 };

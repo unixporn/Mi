@@ -21,10 +21,10 @@ exports.run = async (client, message, args, Discord) => {
                         config.colorRoles
                             .sort(
                                 (a, b) =>
-                                    message.guild.roles.get(b).position -
-                                    message.guild.roles.get(a).position
+                                    message.guild.roles.cache.get(b).position -
+                                    message.guild.roles.cache.get(a).position
                             )
-                            .map((r) => message.guild.roles.get(r))
+                            .map((r) => message.guild.roles.cache.get(r))
                             .join("\n")
                     )
                     .setFooter(`${process.env.PREFIX || "!"}role <rolename>`)
@@ -36,6 +36,7 @@ exports.run = async (client, message, args, Discord) => {
 exports.meta = {
     operatorOnly: false,
     name: "role list",
-    usage: "l",
+    usage: `${process.env.PREFIX || "!"}role list or ${process.env.PREFIX ||
+        "!"}list`,
     description: "Lists colour roles."
 };

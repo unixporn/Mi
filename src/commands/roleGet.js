@@ -1,12 +1,18 @@
 exports.run = async (client, message, args, Discord) => {
     if (!args.length) {
-        return message.channel.embed(
-            `**${message.authorName}**, usage \`${process.env.PREFIX ||
-                "!"}r <rolename>\``
+        return message.channel.send(
+            client
+                .commandHelp("role")
+                .setColor(message.color)
+                .setTitle("Usage:")
         );
     }
 
-    const role = message.guild.roles.find(
+    if (args[0] === "list") {
+        return client.commands.get("list").run(client, message, args, Discord);
+    }
+
+    const role = message.guild.roles.cache.find(
         (r) =>
             r.name.toLowerCase() ===
             args
@@ -29,8 +35,8 @@ exports.run = async (client, message, args, Discord) => {
             }
 
             if (config.colorRoles.includes(role.id)) {
-                if (!message.member.roles.has(role.id)) {
-                    await message.member.roles
+                if (!message.member.roles.cache.has(role.id)) {
+                    await message.member.roles.cache
                         .filter((r) => config.colorRoles.includes(r))
                         .every((r) =>
                             message.member.roles
@@ -61,6 +67,6 @@ exports.run = async (client, message, args, Discord) => {
 exports.meta = {
     operatorOnly: false,
     name: "role get",
-    usage: "r <rolename>",
+    usage: `${process.env.PREFIX || "!"}role <rolename>`,
     description: "Adds input colour role to self."
 };

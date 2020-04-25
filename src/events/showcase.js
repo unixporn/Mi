@@ -13,7 +13,7 @@ module.exports = (client, message, Discord) => {
 **${
                             message.channel
                         }** is for showcasing your creations (rices, applications, creative work).
-**Questions** about ricing belong in ${message.guild.channels.get(
+**Questions** about ricing belong in ${message.guild.channels.cache.get(
                             process.env.RICINGCHANNEL
                         )}.`
                     )

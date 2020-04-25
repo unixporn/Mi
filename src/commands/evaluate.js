@@ -6,8 +6,11 @@ exports.run = async (client, message, args, Discord) => {
     }
 
     if (!args.length) {
-        return message.channel.embed(
-            `**${message.authorName}**, missing input`
+        return message.channel.send(
+            client
+                .commandHelp("e")
+                .setColor(message.color)
+                .setTitle("Usage:")
         );
     }
 
@@ -40,6 +43,6 @@ exports.meta = {
     permissions: { bot: ["SEND_MESSAGES"], user: [] },
     operatorOnly: true,
     name: "evaluate",
-    usage: "e",
+    usage: `${process.env.PREFIX || "!"}e <javascript>`,
     description: "Executes input Javascript"
 };

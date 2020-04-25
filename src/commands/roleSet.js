@@ -1,17 +1,19 @@
 exports.run = async (client, message, args, Discord) => {
     if (!args.length) {
-        return message.channel.embed(
-            `**${message.authorName}**, use \`${process.env.PREFIX ||
-                "!"}setrole <rolename>\``
+        return message.channel.send(
+            client
+                .commandHelp("setrole")
+                .setColor(message.color)
+                .setTitle("Usage:")
         );
     }
 
     let role;
 
     if (args[0] == parseInt(args[0])) {
-        role = message.guild.roles.get(args[0]);
+        role = message.guild.roles.cache.get(args[0]);
     } else {
-        role = message.guild.roles.find(
+        role = message.guild.roles.cache.find(
             (r) => r.name.toLowerCase() === args.join(" ").toLowerCase()
         );
     }
@@ -86,10 +88,10 @@ exports.run = async (client, message, args, Discord) => {
                         config.colorRoles
                             .sort(
                                 (a, b) =>
-                                    message.guild.roles.get(b).position -
-                                    message.guild.roles.get(a).position
+                                    message.guild.roles.cache.get(b).position -
+                                    message.guild.roles.cache.get(a).position
                             )
-                            .map((r) => message.guild.roles.get(r))
+                            .map((r) => message.guild.roles.cache.get(r))
                             .join("\n")
                     )
             );
@@ -104,6 +106,6 @@ exports.run = async (client, message, args, Discord) => {
 exports.meta = {
     operatorOnly: true,
     name: "role set",
-    usage: "setrole <rolename>",
+    usage: `${process.env.PREFIX || "!"}setrole <rolename>`,
     description: "Adds role to list of available roles"
 };
