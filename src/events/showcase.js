@@ -24,7 +24,7 @@ module.exports = (client, message, Discord) => {
         } finally {
             client.sendLog(
                 new Discord.MessageEmbed()
-                    .setColor(message.color)
+                    .setColor("#ff5555")
                     .setAuthor(
                         message.authorDisplayName,
                         message.author.avatarURL({ size: 2048 })
