@@ -1,0 +1,19 @@
+{
+    "UserSchema": {
+        "default": {
+            "id": "",
+            "guild": "",
+            "profile": {
+                "git": "",
+                "dotfiles": "",
+                "description": ""
+            }
+        }
+    },
+    "confirmDialogues": {
+        "timeout": 20000
+    },
+    "showcaseChannel": "635625917623828520",
+    "logChannel": "673003438635876382",
+    "ricingChannel": "635625925748457482"
+}

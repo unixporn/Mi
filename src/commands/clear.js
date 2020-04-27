@@ -10,7 +10,7 @@ exports.run = async (client, message, args, Discord) => {
     client.UserSchema.findOne(
         {
             id: user.id,
-            guild: message.guild.id
+            guild: message.guild.id,
         },
         async (error, config) => {
             if (error) {
@@ -19,7 +19,9 @@ exports.run = async (client, message, args, Discord) => {
 
             if (
                 user !== message.author &&
-                !message.member.hasPermission("MANAGE_GUILD")
+                !message.member.hasPermission(
+                    "MANAGE_GUILD"
+                )
             ) {
                 return message.channel.embed(
                     `**${message.authorDisplayName}**, you cannot clear the profile of other users`
@@ -39,14 +41,16 @@ exports.run = async (client, message, args, Discord) => {
 
             try {
                 var response = await message.channel.awaitMessages(
-                    (m) =>
+                    m =>
                         ["yes", "y", "no", "n"].includes(
                             m.content.toLowerCase()
                         ) && m.author === message.author,
                     {
                         max: 1,
-                        time: client.settings.confirmDialogues.timeout,
-                        errors: ["time"]
+                        time:
+                            client.settings.confirmDialogues
+                                .timeout,
+                        errors: ["time"],
                     }
                 );
             } catch (err) {
@@ -54,7 +58,9 @@ exports.run = async (client, message, args, Discord) => {
                     `**${message.authorDisplayName}**, cancelled selection, missing or invalid input`
                 );
             }
-            response = response.first().content.toLowerCase();
+            response = response
+                .first()
+                .content.toLowerCase();
 
             if (["no", "n"].includes(response)) {
                 return message.channel.embed(
@@ -65,12 +71,14 @@ exports.run = async (client, message, args, Discord) => {
             config.profile = {
                 git: "",
                 dots: "",
-                description: ""
+                description: "",
             };
 
-            message.channel.embed(`Cleared **profile** of user **${user}**`);
+            message.channel.embed(
+                `Cleared **profile** of user **${user}**`
+            );
 
-            config.save().catch((e) => console.error(e));
+            config.save().catch(e => console.error(e));
         }
     );
 };
@@ -79,5 +87,5 @@ exports.meta = {
     operatorOnly: true,
     name: "user clear",
     usage: `${process.env.PREFIX || "!"}purge <user>`,
-    description: "Clears custom entries on user profile"
+    description: "Clears custom entries on user profile",
 };

@@ -7,10 +7,7 @@ exports.run = async (client, message, args, Discord) => {
 
     if (!args.length) {
         return message.channel.send(
-            client
-                .commandHelp("e")
-                .setColor(message.color)
-                .setTitle("Usage:")
+            client.commandHelp(message)
         );
     }
 
@@ -20,7 +17,9 @@ exports.run = async (client, message, args, Discord) => {
         );
     }
 
-    let embed = new Discord.MessageEmbed().setColor(message.color);
+    let embed = new Discord.MessageEmbed().setColor(
+        message.color
+    );
 
     try {
         embed.setDescription(
@@ -29,7 +28,10 @@ exports.run = async (client, message, args, Discord) => {
                     .inspect(eval(args.join(" ")))
                     .substring(0, 2000)
                     //Globally, ignorant of case, redact bot token
-                    .replace(RegExp(process.env.TOKEN, "gi"), "TOKEN") +
+                    .replace(
+                        RegExp(process.env.TOKEN, "gi"),
+                        "TOKEN"
+                    ) +
                 "```"
         );
     } catch (error) {
@@ -41,8 +43,9 @@ exports.run = async (client, message, args, Discord) => {
 
 exports.meta = {
     permissions: { bot: ["SEND_MESSAGES"], user: [] },
-    operatorOnly: true,
+    operatorOnly: false,
+    hostOnly: true,
     name: "evaluate",
     usage: `${process.env.PREFIX || "!"}e <javascript>`,
-    description: "Executes input Javascript"
+    description: "Executes input Javascript",
 };

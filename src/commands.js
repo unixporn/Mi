@@ -34,15 +34,27 @@ module.exports = new Discord.Collection()
 
     .set("setgit", require("./commands/gitEdit.js"))
 
-    .set("rep", require("./commands/userRep.js"))
-    .set("thanks", require("./commands/userRep.js"))
-
     .set("desc", require("./commands/descriptionEdit.js"))
-    .set("description", require("./commands/descriptionEdit.js"))
-    .set("setdesc", require("./commands/descriptionEdit.js"))
-    .set("setdescription", require("./commands/descriptionEdit.js"))
-    .set("editdesc", require("./commands/descriptionEdit.js"))
-    .set("editdescription", require("./commands/descriptionEdit.js"))
+    .set(
+        "description",
+        require("./commands/descriptionEdit.js")
+    )
+    .set(
+        "setdesc",
+        require("./commands/descriptionEdit.js")
+    )
+    .set(
+        "setdescription",
+        require("./commands/descriptionEdit.js")
+    )
+    .set(
+        "editdesc",
+        require("./commands/descriptionEdit.js")
+    )
+    .set(
+        "editdescription",
+        require("./commands/descriptionEdit.js")
+    )
 
     .set("profile", require("./commands/userInfo.js"))
     .set("userinfo", require("./commands/userInfo.js"))
@@ -56,8 +68,4 @@ module.exports = new Discord.Collection()
 
     .set("serverinfo", require("./commands/guildInfo.js"))
     .set("guildinfo", require("./commands/guildInfo.js"))
-    .set("server", require("./commands/guildInfo.js"))
-
-    .set("editscore", require("./commands/scoreEdit.js"))
-
-    .set("score", require("./commands/scoreView.js"));
+    .set("server", require("./commands/guildInfo.js"));

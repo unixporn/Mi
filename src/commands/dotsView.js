@@ -10,7 +10,7 @@ exports.run = async (client, message, args, Discord) => {
     client.UserSchema.findOne(
         {
             id: user.id,
-            guild: message.guild.id
+            guild: message.guild.id,
         },
         async (error, config) => {
             if (error) {
@@ -19,13 +19,16 @@ exports.run = async (client, message, args, Discord) => {
 
             if (!config) {
                 config = new client.UserSchema(
-                    Object.assign(client.settings.UserSchema.default, {
-                        id: user.id,
-                        guild: message.guild.id
-                    })
+                    Object.assign(
+                        client.settings.UserSchema.default,
+                        {
+                            id: user.id,
+                            guild: message.guild.id,
+                        }
+                    )
                 )
                     .save()
-                    .catch((e) => console.error(e));
+                    .catch(e => console.error(e));
             }
 
             await config;
@@ -36,8 +39,9 @@ exports.run = async (client, message, args, Discord) => {
                         ? `**dotfiles** for ${user} **${config.profile.dotfiles}**`
                         : `**${
                               message.authorDisplayName
-                          }**, please use: \`\`\`${process.env.PREFIX ||
-                              "!"}setdotfiles <url>\`\`\``
+                          }**, please use: \`\`\`${
+                              process.env.PREFIX || "!"
+                          }setdotfiles <url>\`\`\``
                 );
             } else {
                 message.channel.embed(
@@ -54,5 +58,5 @@ exports.meta = {
     operatorOnly: false,
     name: "user dots",
     usage: `${process.env.PREFIX || "!"}dots <@user>`,
-    description: "Display user's dotfiles link."
+    description: "Display user's dotfiles link.",
 };

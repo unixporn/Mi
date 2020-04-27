@@ -1,6 +1,6 @@
-require("dotenv").config();
 const Discord = require("discord.js");
 
+require("dotenv").config();
 require("./utilities/messageAuthorDisplayName.js");
 require("./utilities/messageColor.js");
 require("./utilities/messageFetchUser.js");
@@ -21,19 +21,19 @@ module.exports = class extends Discord.Client {
             restTimeOffset: 2500,
             restSweepInterval: 30,
             ws: {
-                compress: false
+                compress: false,
             },
             disabledEvents: [
                 "TYPING_START",
                 "PRESENCE_UPDATE",
                 "USER_UPDATE",
                 "WEBHOOKS_UPDATE",
-                "MESSAGE_REACTION_ADD"
-            ]
+                "MESSAGE_REACTION_ADD",
+            ],
         });
 
         //Settings file
-        this.settings = require("./settings.json");
+        this.settings = require("../settings.json");
 
         //Database schema for per-guild colour role list
         this.RoleSchema = require("./models/roleSchema.js");
@@ -44,38 +44,47 @@ module.exports = class extends Discord.Client {
         this.commands = require("./commands.js");
 
         //Import message handler only once
-        this.message = (message) =>
-            require("./events/message.js")(this, message, Discord);
+        this.message = message =>
+            require("./events/message.js")(
+                this,
+                message,
+                Discord
+            );
 
-        this.ready = () => require("./events/ready.js")(this);
+        this.ready = () =>
+            require("./events/ready.js")(this);
 
-        this.messageDelete = (message) =>
-            require("./events/messageDelete.js")(this, message, Discord);
+        this.messageDelete = message =>
+            require("./events/messageDelete.js")(
+                this,
+                message,
+                Discord
+            );
 
-        this.guildMemberAdd = (member) =>
-            require("./events/guildMemberAdd.js")(this, member, Discord);
+        this.guildMemberAdd = member =>
+            require("./events/guildMemberAdd.js")(
+                this,
+                member,
+                Discord
+            );
 
         this.showcase = (client, message) =>
-            require("./events/showcase.js")(client, message, Discord);
+            require("./events/showcase.js")(
+                client,
+                message,
+                Discord
+            );
 
-        this.sendLog = (message) =>
-            this.channels.cache.get(this.settings.logChannel).send(message);
+        this.sendLog = message =>
+            this.channels.cache
+                .get(this.settings.logChannel)
+                .send(message);
 
-        this.commandHelp = (name) =>
-            require("./utilities/miFetchCommandHelp.js")(this, name);
-
-        this.handleMessageScore = (message) =>
-            require("./events/handleMessageScore.js")(this, message);
-
-        this.log = (log) =>
-            require("./events/handleLog.js")(this, log, Discord);
-
-        this.createUserSchema = (user, guild) =>
-            require("./createUserSchema.js")(this, user, guild);
-
-        this.on("userScoreUpdate", (scoreUpdate) =>
-            require("./events/userScoreUpdate.js")(this, scoreUpdate)
-        );
+        this.commandHelp = name =>
+            require("./utilities/miFetchCommandHelp.js")(
+                this,
+                name
+            );
 
         this
             //Events
@@ -83,27 +92,31 @@ module.exports = class extends Discord.Client {
 
             .on("reconnect", () => this.ready())
 
-            .on("message", (message) => this.message(message))
+            .on("message", message => this.message(message))
 
-            .on("guildMemberAdd", (member) => this.guildMemberAdd(member))
+            .on("guildMemberAdd", member =>
+                this.guildMemberAdd(member)
+            )
 
-            .on("messageDelete", (message) => this.messageDelete(message));
+            .on("messageDelete", message =>
+                this.messageDelete(message)
+            );
 
         //Connect to MongoDB
         require("mongoose").connect(process.env.MONGO, {
             useNewUrlParser: true,
-            useUnifiedTopology: true
+            useUnifiedTopology: true,
         });
 
         process
-            .on("unhandledRejection", (error) => {
-                this.log(error.message);
+            .on("unhandledRejection", error => {
+                console.log(error);
             })
-            .on("uncaughtException", (error) => {
-                this.log(error.message);
+            .on("uncaughtException", error => {
+                console.log(error);
             })
-            .on("warning", (error) => {
-                this.log(error.message);
+            .on("warning", error => {
+                console.log(error);
             });
 
         this.login(process.env.TOKEN);

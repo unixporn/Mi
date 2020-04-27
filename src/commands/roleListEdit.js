@@ -14,7 +14,9 @@ exports.run = async (client, message, args, Discord) => {
         role = message.guild.roles.cache.get(args[0]);
     } else {
         role = message.guild.roles.cache.find(
-            (r) => r.name.toLowerCase() === args.join(" ").toLowerCase()
+            r =>
+                r.name.toLowerCase() ===
+                args.join(" ").toLowerCase()
         );
     }
 
@@ -26,7 +28,7 @@ exports.run = async (client, message, args, Discord) => {
 
     client.RoleSchema.findOne(
         {
-            id: message.guild.id
+            id: message.guild.id,
         },
         async (error, config) => {
             if (error) {
@@ -36,10 +38,10 @@ exports.run = async (client, message, args, Discord) => {
             if (!config) {
                 config = new client.RoleSchema({
                     id: message.guild.id,
-                    colorRoles: [role.id]
+                    colorRoles: [role.id],
                 })
                     .save()
-                    .catch((e) => {
+                    .catch(e => {
                         console.error(e);
                     });
             }
@@ -52,14 +54,23 @@ exports.run = async (client, message, args, Discord) => {
 
                 try {
                     var response = await message.channel.awaitMessages(
-                        (m) =>
-                            ["yes", "y", "no", "n"].includes(
+                        m =>
+                            [
+                                "yes",
+                                "y",
+                                "no",
+                                "n",
+                            ].includes(
                                 m.content.toLowerCase()
-                            ) && m.author === message.author,
+                            ) &&
+                            m.author === message.author,
                         {
                             max: 1,
-                            time: client.settings.confirmDialogues.timeout,
-                            errors: ["time"]
+                            time:
+                                client.settings
+                                    .confirmDialogues
+                                    .timeout,
+                            errors: ["time"],
                         }
                     );
                 } catch (err) {
@@ -67,7 +78,9 @@ exports.run = async (client, message, args, Discord) => {
                         `**${message.authorDisplayName}**, cancelled selection, missing or invalid input`
                     );
                 }
-                response = response.first().content.toLowerCase();
+                response = response
+                    .first()
+                    .content.toLowerCase();
 
                 if (["no", "n"].includes(response)) {
                     return message.channel.embed(
@@ -75,7 +88,10 @@ exports.run = async (client, message, args, Discord) => {
                     );
                 }
 
-                config.colorRoles.splice(config.colorRoles.indexOf(role.id), 1);
+                config.colorRoles.splice(
+                    config.colorRoles.indexOf(role.id),
+                    1
+                );
             } else {
                 config.colorRoles.push(role.id);
             }
@@ -83,20 +99,30 @@ exports.run = async (client, message, args, Discord) => {
             message.channel.send(
                 new Discord.MessageEmbed()
                     .setColor(message.color)
-                    .setTitle(`Updated role list for **${message.guild.name}**`)
+                    .setTitle(
+                        `Updated role list for **${message.guild.name}**`
+                    )
                     .setDescription(
                         config.colorRoles
                             .sort(
                                 (a, b) =>
-                                    message.guild.roles.cache.get(b).position -
-                                    message.guild.roles.cache.get(a).position
+                                    message.guild.roles.cache.get(
+                                        b
+                                    ).position -
+                                    message.guild.roles.cache.get(
+                                        a
+                                    ).position
                             )
-                            .map((r) => message.guild.roles.cache.get(r))
+                            .map(r =>
+                                message.guild.roles.cache.get(
+                                    r
+                                )
+                            )
                             .join("\n")
                     )
             );
 
-            config.save().catch((e) => {
+            config.save().catch(e => {
                 console.error(e);
             });
         }
@@ -107,5 +133,5 @@ exports.meta = {
     operatorOnly: true,
     name: "role set",
     usage: `${process.env.PREFIX || "!"}setrole <rolename>`,
-    description: "Adds role to list of available roles"
+    description: "Adds role to list of available roles",
 };

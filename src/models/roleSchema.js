@@ -4,6 +4,6 @@ module.exports = mongoose.model(
     "ColorRoles",
     mongoose.Schema({
         id: String,
-        colorRoles: Array
+        colorRoles: Array,
     })
 );
