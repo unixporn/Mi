@@ -6,7 +6,7 @@ exports.run = async (client, message, args, Discord) => {
     client.UserSchema.findOne(
         {
             id: message.author.id,
-            guild: message.guild.id
+            guild: message.guild.id,
         },
         async (error, config) => {
             if (error) {
@@ -17,7 +17,7 @@ exports.run = async (client, message, args, Discord) => {
                 config = new client.UserSchema(
                     Object.assign(client.settings.UserSchema.default, {
                         id: message.author.id,
-                        guild: message.guild.id
+                        guild: message.guild.id,
                     })
                 )
                     .save()
@@ -45,7 +45,7 @@ exports.run = async (client, message, args, Discord) => {
                         {
                             max: 1,
                             time: client.settings.confirmDialogues.timeout,
-                            errors: ["time"]
+                            errors: ["time"],
                         }
                     );
                 } catch (err) {
@@ -88,7 +88,8 @@ exports.run = async (client, message, args, Discord) => {
 exports.meta = {
     operatorOnly: false,
     name: "user description",
-    usage: `${process.env.PREFIX || "!"}desc <info> or ${process.env.PREFIX ||
-        "!"}desc clear`,
-    description: "Adds a description to your profile, 256 characters max"
+    usage: `${process.env.PREFIX || "!"}desc <info> or ${
+        process.env.PREFIX || "!"
+    }desc clear`,
+    description: "Adds a description to your profile, 256 characters max",
 };

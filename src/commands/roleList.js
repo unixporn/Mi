@@ -1,7 +1,7 @@
 exports.run = (client, message, args, Discord) => {
     client.RoleSchema.findOne(
         {
-            id: message.guild.id
+            id: message.guild.id,
         },
         async (error, config) => {
             if (error) {
@@ -21,13 +21,25 @@ exports.run = (client, message, args, Discord) => {
                         config.colorRoles
                             .sort(
                                 (a, b) =>
-                                    message.guild.roles.cache.get(b).position -
-                                    message.guild.roles.cache.get(a).position
+                                    message.guild.roles.cache.get(
+                                        b
+                                    ).position -
+                                    message.guild.roles.cache.get(
+                                        a
+                                    ).position
                             )
-                            .map((r) => message.guild.roles.cache.get(r))
+                            .map(r =>
+                                message.guild.roles.cache.get(
+                                    r
+                                )
+                            )
                             .join("\n")
                     )
-                    .setFooter(`${process.env.PREFIX || "!"}role <rolename>`)
+                    .setFooter(
+                        `${
+                            process.env.PREFIX || "!"
+                        }role <rolename>`
+                    )
             );
         }
     );
@@ -36,7 +48,8 @@ exports.run = (client, message, args, Discord) => {
 exports.meta = {
     operatorOnly: false,
     name: "role list",
-    usage: `${process.env.PREFIX || "!"}role list or ${process.env.PREFIX ||
-        "!"}list`,
-    description: "Lists colour roles."
+    usage: `${process.env.PREFIX || "!"}role list or ${
+        process.env.PREFIX || "!"
+    }list`,
+    description: "Lists colour roles.",
 };

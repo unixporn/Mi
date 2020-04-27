@@ -8,10 +8,7 @@ module.exports = mongoose.model(
         profile: {
             git: String,
             dotfiles: String,
-            description: String
+            description: String,
         },
-        lastSentRep: Date,
-        score: require("mongoose-float").loadType(mongoose, 6),
-        repHistory: Array
     })
 );

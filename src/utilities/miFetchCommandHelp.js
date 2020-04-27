@@ -6,7 +6,7 @@ module.exports = (client, message) => {
         .substring((process.env.PREFIX || "!").length);
 
     if (!(command = client.commands.get(name))) {
-        throw new RangeError(`"${name}" is not a command.`);
+        throw new Error(`"${name}" is not a command.`);
     }
 
     return message.channel.send(

@@ -4,23 +4,22 @@ exports.run = async (client, message, args, Discord) => {
     }
 
     if (args[0] === "list") {
-        return client.commands.get("list").run(client, message, args, Discord);
+        return client.commands
+            .get("list")
+            .run(client, message, args, Discord);
     }
 
     const role = message.guild.roles.cache.find(
-        (r) =>
+        r =>
             r.name.toLowerCase() ===
-            args
-                .join(" ")
-                .toLowerCase()
-                .replace("@", "")
+            args.join(" ").toLowerCase().replace("@", "")
     );
 
     if (!role) {
         return message.channel.embed(
-            `**${message.authorDisplayName}**, role *${args.join(
-                " "
-            )}* not found`
+            `**${
+                message.authorDisplayName
+            }**, role *${args.join(" ")}* not found`
         );
     }
 
@@ -31,14 +30,26 @@ exports.run = async (client, message, args, Discord) => {
                 return console.error(error);
             }
 
+            if (!config && !config.colorRoles[0]) {
+                return message.channel.embed(
+                    `**${message.authorDisplayName}**, no colour roles available at this time`
+                );
+            }
+
             if (config.colorRoles.includes(role.id)) {
-                if (!message.member.roles.cache.has(role.id)) {
+                if (
+                    !message.member.roles.cache.has(role.id)
+                ) {
                     await message.member.roles.cache
-                        .filter((r) => config.colorRoles.includes(r))
-                        .every((r) =>
+                        .filter(r =>
+                            config.colorRoles.includes(r)
+                        )
+                        .every(r =>
                             message.member.roles
                                 .remove(r)
-                                .catch((e) => console.error(e))
+                                .catch(e =>
+                                    console.error(e)
+                                )
                         );
 
                     await message.member.roles.add(role);
@@ -65,5 +76,5 @@ exports.meta = {
     operatorOnly: false,
     name: "role get",
     usage: `${process.env.PREFIX || "!"}role <rolename>`,
-    description: "Adds input colour role to self."
+    description: "Adds input colour role to self.",
 };

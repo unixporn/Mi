@@ -1,7 +1,12 @@
 exports.run = (client, message, args, Discord) => {
-    if (args.length && client.commands.get(args.join(" "))) {
+    if (
+        args.length &&
+        client.commands.get(args.join(" "))
+    ) {
         if (!client.commands.get(args.join(" "))) {
-            throw new RangeError(`"${args.join(" ")}" is not a command.`);
+            throw new RangeError(
+                `"${args.join(" ")}" is not a command.`
+            );
         }
 
         return message.channel.send(
@@ -16,11 +21,17 @@ exports.run = (client, message, args, Discord) => {
 
     const embed = new Discord.MessageEmbed()
         .setColor(message.color)
-        .setTitle(`Commands for **${client.user.username}**`);
+        .setTitle(
+            `Commands for **${client.user.username}**`
+        );
 
     Array.from(
-        new Set(client.commands.filter((c) => !c.meta.operatorOnly).array())
-    ).forEach((c) =>
+        new Set(
+            client.commands
+                .filter(c => !c.meta.operatorOnly)
+                .array()
+        )
+    ).forEach(c =>
         embed.addField(
             c.meta.name.toTitleCase(),
             `\`\`\`${c.meta.usage}\`\`\`\n${c.meta.description}`
@@ -33,7 +44,8 @@ exports.run = (client, message, args, Discord) => {
 exports.meta = {
     operatorOnly: false,
     name: "bot help",
-    usage: `${process.env.PREFIX || "!"}help or ${process.env.PREFIX ||
-        "!"}help <command>`,
-    description: "You are here"
+    usage: `${process.env.PREFIX || "!"}help or ${
+        process.env.PREFIX || "!"
+    }help <command>`,
+    description: "You are here",
 };

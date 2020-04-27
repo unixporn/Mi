@@ -6,7 +6,7 @@ exports.run = async (client, message, args, Discord) => {
     client.UserSchema.findOne(
         {
             id: message.author.id,
-            guild: message.guild.id
+            guild: message.guild.id,
         },
         async (error, config) => {
             if (error) {
@@ -15,18 +15,23 @@ exports.run = async (client, message, args, Discord) => {
 
             if (!config) {
                 config = new client.UserSchema(
-                    Object.assign(client.settings.UserSchema.default, {
-                        id: message.author.id,
-                        guild: message.guild.id
-                    })
+                    Object.assign(
+                        client.settings.UserSchema.default,
+                        {
+                            id: message.author.id,
+                            guild: message.guild.id,
+                        }
+                    )
                 )
                     .save()
-                    .catch((e) => console.error(e));
+                    .catch(e => console.error(e));
             }
 
             if (
                 args.length &&
-                ["clear", "remove"].includes(args[0].toLowerCase())
+                ["clear", "remove"].includes(
+                    args[0].toLowerCase()
+                )
             ) {
                 if (!config.profile.git) {
                     return message.channel.embed(
@@ -37,20 +42,29 @@ exports.run = async (client, message, args, Discord) => {
                 message.channel.embed(
                     `**${message.authorDisplayName}**, are you sure you want to clear your profile git?`,
                     {
-                        footer: "yes / no"
+                        footer: "yes / no",
                     }
                 );
 
                 try {
                     var response = await message.channel.awaitMessages(
-                        (m) =>
-                            ["yes", "y", "no", "n"].includes(
+                        m =>
+                            [
+                                "yes",
+                                "y",
+                                "no",
+                                "n",
+                            ].includes(
                                 m.content.toLowerCase()
-                            ) && m.author === message.author,
+                            ) &&
+                            m.author === message.author,
                         {
                             max: 1,
-                            time: client.settings.confirmDialogues.timeout,
-                            errors: ["time"]
+                            time:
+                                client.settings
+                                    .confirmDialogues
+                                    .timeout,
+                            errors: ["time"],
                         }
                     );
                 } catch (err) {
@@ -58,7 +72,9 @@ exports.run = async (client, message, args, Discord) => {
                         `**${message.authorDisplayName}**, cancelled selection, missing or invalid input`
                     );
                 }
-                response = response.first().content.toLowerCase();
+                response = response
+                    .first()
+                    .content.toLowerCase();
 
                 if (["no", "n"].includes(response)) {
                     return message.channel.embed(
@@ -72,7 +88,9 @@ exports.run = async (client, message, args, Discord) => {
                     `Removed **git** from user **${message.author}**`
                 );
             } else if (args.length) {
-                if (args[0].match("(https?:\\/\\/[^\\s]+)")) {
+                if (
+                    args[0].match("(https?:\\/\\/[^\\s]+)")
+                ) {
                     if (args[0].length <= 128) {
                         config.profile.git = args[0];
 
@@ -93,7 +111,7 @@ exports.run = async (client, message, args, Discord) => {
                 client.commandHelp(message);
             }
 
-            config.save().catch((e) => console.error(e));
+            config.save().catch(e => console.error(e));
         }
     );
 };
@@ -102,5 +120,5 @@ exports.meta = {
     operatorOnly: false,
     name: "user set git",
     usage: `${process.env.PREFIX || "!"}setgit <url>`,
-    description: "Set Git link on your profile"
+    description: "Set Git link on your profile",
 };

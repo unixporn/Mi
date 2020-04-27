@@ -9,8 +9,7 @@ module.exports = (client, message, Discord) => {
                 new Discord.MessageEmbed()
                     .setColor("#FFFFFE")
                     .setDescription(
-                        `
-**${
+                        `**${
                             message.channel
                         }** is for showcasing your creations (rices, applications, creative work).
 **Questions** about ricing belong in ${message.guild.channels.cache.get(

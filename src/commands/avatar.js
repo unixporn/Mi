@@ -19,5 +19,5 @@ exports.meta = {
     operatorOnly: false,
     name: "avatar",
     usage: `${process.env.PREFIX || "!"}pfp <user>`,
-    description: "Shows avatar of @mentioned user or self"
+    description: "Shows avatar of @mentioned user or self",
 };
