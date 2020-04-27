@@ -6,7 +6,9 @@ exports.run = async (client, message, args, Discord) => {
     }
 
     if (!args.length) {
-        return message.channel.send(client.commandHelp(message));
+        return message.channel.send(
+            client.commandHelp(message)
+        );
     }
 
     if (message.content.toLowerCase().includes("token")) {
@@ -15,7 +17,9 @@ exports.run = async (client, message, args, Discord) => {
         );
     }
 
-    let embed = new Discord.MessageEmbed().setColor(message.color);
+    let embed = new Discord.MessageEmbed().setColor(
+        message.color
+    );
 
     try {
         embed.setDescription(

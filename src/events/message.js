@@ -1,9 +1,15 @@
 module.exports = async (client, message, Discord) => {
-    if (message.author.bot || message.channel.type !== "text" ) {
+    if (
+        message.author.bot ||
+        message.channel.type !== "text"
+    ) {
         return;
     }
 
-    if (message.channel.id === client.settings.showcaseChannel) {
+    if (
+        message.channel.id ===
+        client.settings.showcaseChannel
+    ) {
         return client.showcase(client, message);
     }
 
@@ -16,8 +22,14 @@ module.exports = async (client, message, Discord) => {
         return client.commandHelp(message);
     }
 
-    if (message.content.startsWith(prefix + cmd) && (command = client.commands.get(cmd))) {
-        if (!command.meta.operatorOnly || message.member.hasPermission("MANAGE_GUILD")) {
+    if (
+        message.content.startsWith(prefix + cmd) &&
+        (command = client.commands.get(cmd))
+    ) {
+        if (
+            !command.meta.operatorOnly ||
+            message.member.hasPermission("MANAGE_GUILD")
+        ) {
             command.run(client, message, args, Discord);
         }
     }

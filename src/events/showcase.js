@@ -16,7 +16,10 @@ module.exports = (client, message, Discord) => {
                             client.settings.ricingChannel
                         )}.`
                     )
-                    .addField("You said", message.content.substring(0, 512))
+                    .addField(
+                        "You said",
+                        message.content.substring(0, 512)
+                    )
             );
         } catch (error) {
             console.error(error);
@@ -26,9 +29,13 @@ module.exports = (client, message, Discord) => {
                     .setColor(message.color)
                     .setAuthor(
                         message.authorDisplayName,
-                        message.author.avatarURL({ size: 2048 })
+                        message.author.avatarURL({
+                            size: 2048,
+                        })
                     )
-                    .setTitle("Improper Showcase Submission")
+                    .setTitle(
+                        "Improper Showcase Submission"
+                    )
                     .setDescription(message.content)
                     .addField("Channel", message.channel)
                     .setFooter(new Date())
